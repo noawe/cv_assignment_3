@@ -4,7 +4,7 @@ global fig;
 global images;
 global current;
 
-folder = 'planes/';
+folder = 'mini_planes/';
 current = 1;
 images = [];
 
@@ -12,7 +12,7 @@ files = dir(strcat(folder, '*.jpg'));
 
 fig = figure("keypressfcn", @onKey);
 
-for j = 1 : 1 %length(files)
+for j = 1 : length(files)
   filename = strcat(folder, files(j).name);
   img = imread(filename);
 
@@ -28,7 +28,8 @@ for j = 1 : 1 %length(files)
   % normalize
   img = uint8((double(img)-double(min(min(img))))*(255/double(max(max(img))- min(min(img)))));
   
-  % gabor
+  % gabor 
+  % TODO: find working parameters...
   img = GaborEnergy(img, 4, 9, 9, 2, 0, 0);  
   
   images{j} = img;

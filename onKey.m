@@ -1,3 +1,4 @@
+% navigation through pictures -> left right space or escape
 function onKey(hobj, evt)
   global fig;
   global images;
