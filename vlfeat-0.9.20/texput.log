@@ -1,0 +1,13 @@
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016/Arch Linux) (preloaded format=mex 2016.11.23)  13 FEB 2017 15:56
+entering extended mode
+ restricted \write18 enabled.
+ %&-line parsing enabled.
+**"CFLAGS=$CFLAGS " LDFLAGS=$LDFLAGS  -I. -Itoolbox ./toolbox/fisher/vl_fisher.
+c -Ltoolbox/mex/mexa64 -lvl -lm -outdir toolbox/mex/mexa64/
+
+! Emergency stop.
+<*> "CFLAGS=$CFLAGS " 
+                      LDFLAGS=$LDFLAGS  -I. -Itoolbox ./toolbox/fisher/vl_fi...
+End of file on the terminal!
+
+No pages of output.
