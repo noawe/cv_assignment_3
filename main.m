@@ -10,11 +10,11 @@ global current;
 folder = 'img/mini_airplanes/';
 current = 1;
 images = [];
-trainset_size = 100;
-bow_size = 100; % size of bow dictionary
+trainset_size = 60;
+bow_size = 50; % size of bow dictionary
 
 %build datasets with labels and filenames
-plane_set = struct("label", 1, "file", glob(strcat('img/planes/', '*.jpg')));
+plane_set = struct("label", 1, "file", glob(strcat('img/planes_trimmed/', '*.jpg')));
 car_set = struct("label", -1, "file", glob(strcat('img/cars/', '*.jpg')));
 
 %split into training and test images
@@ -44,7 +44,12 @@ function features = get_features(img)
 	%  img = GaborEnergy(img, 4, 9, 9, 2, 0, 0);  
 
 	% sift
-	[f,features] = vl_sift(single(img));
+	 [f,features] = vl_sift(single(img));
+	
+	%hog
+%	cellSize = 16 ;
+%	hog = vl_hog(single(img), cellSize) ;
+%	features = reshape(hog, 31, prod(size(hog)(1:2)));
 
 endfunction
 
@@ -96,11 +101,17 @@ function test_instance = get_test_instance (filename, bow)
 
 endfunction
 
-function test (test_set, bow, model)
-
+function [tp, tn, fp, fn] = test (test_set, bow, model)
+	tp = tn = fp = fn = 0;	
 	for i = 1:length(test_set)
 		t = get_test_instance (test_set(i).file, bow);
-		svmpredict(test_set(i).label, double(rot90(t)), model)
+		[l, ~, ~] = svmpredict(test_set(i).label, double(rot90(t)), model);
+		test_set(i).predicted_label = l;
+		
+		if test_set(i).label==1 & test_set(i).predicted_label==1 tp++; endif
+		if test_set(i).label==-1 & test_set(i).predicted_label==-1 tn++; endif
+		if test_set(i).label==-1 & test_set(i).predicted_label==1 fp++; endif
+		if test_set(i).label==1 & test_set(i).predicted_label==-1 fn++; endif
 	endfor
 
 endfunction
@@ -110,6 +121,7 @@ endfunction
 [bow, model] = train (train_set, bow_size);
 
 %testing
-test (test_set, bow, model);
+[tp, tn, fp, fn] = test (test_set, bow, model);
 
-
+%success rate
+sr = (tp+tn)/length(test_set);
